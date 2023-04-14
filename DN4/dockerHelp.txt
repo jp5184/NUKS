@@ -1,0 +1,4 @@
+faas-cli new restaurant-sort --lang python3                                         # Nato spremenimo .yml in handler
+sudo faas-cli build -f restaurant-sort.yml
+sudo faas-cli push -f restaurant-sort.yml                                           # Objavimo storitev
+faas-cli deploy --image jp5184/restaurant-sort --name restaurant-sort               # Zaženemo storitev
