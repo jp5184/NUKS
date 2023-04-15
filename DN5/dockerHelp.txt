@@ -1,0 +1,48 @@
+faas-cli new restaurant-sort --lang python3                                                     # Nato spremenimo .yml in handler
+sudo faas-cli build -f restaurant-sort.yml
+sudo faas-cli push -f restaurant-sort.yml                                                       # Objavimo storitev
+faas-cli deploy --image jp5184/restaurant-sort --name restaurant-sort                           # Zaženemo storitev
+
+
+touch Dockerfile                                                                                # Ustvari blank Dockerfile
+sudo docker build -t jp5184/vue-spa-docker .                                                    # Ustvari docker image
+sudo docker run -p 8085:8085 jp5184/vue-spa-docker                                              # Poženemo docker image
+sudo docker push jp5184/vue-spa-docker                                                          # Objavi docker image na DockerHub
+
+sudo docker build -t jp5184/fast-api-docker .
+sudo docker run --network=host -p 8000:8000 jp5184/fast-api-docker
+sudo docker push jp5184/fast-api-docker 
+
+
+sudo docker image list                                                                          # Seznam docker image-ov
+sudo docker run --network=host -p 8000:8000 jp5184/fast-api-docker                              # Zažene fastAPI --network omogoči omrežni dostop
+sudo docker push jp5184/fast-api-docker
+
+
+# MySQL db
+sudo docker pull mysql:latest
+sudo docker run --name mysql-docker -e MYSQL_ROOT_PASSWORD=password -p 3306:3306 -d mysql       # Ustvari in požene MySQL docker
+sudo docker exec -it mysql-docker mysql -uroot -ppassword                                       # Dostop do spreminjanja baze
+CREATE DATABASE fastapi_db;
+
+USE fastapi_db;
+CREATE TABLE RestaurantNames (
+    id INT NOT NULL AUTO_INCREMENT,
+    restaurant_name VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+USE fastapi_db;
+CREATE TABLE RestaurantRatings (
+    id INT NOT NULL AUTO_INCREMENT,
+    restaurant_id INT NOT NULL,
+    rating INT NOT NULL,
+    PRIMARY KEY (id)
+);
+
+exit
+
+sudo docker tag mysql:latest jp5184/mysql-docker                                                # Dodamo tag
+sudo docker push jp5184/mysql-docker                                                            # Objavimo docker image na DockerHub
+
+
