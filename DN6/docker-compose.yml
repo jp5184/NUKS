@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  api:
+    image: jp5184/fast-api-docker
+    ports:
+      - "8000:8000"
+    volumes:
+      - api-data:/app/data
+    environment:
+      - DB_CONNECTION_STRING=sqlite:////app/data/restaurantDatabase.db
+
+  frontend:
+    image: jp5184/vue-spa-docker
+    ports:
+      - "8085:8085"
+
+volumes:
+  api-data:
